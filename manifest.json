@@ -1,0 +1,36 @@
+{
+   "background": {
+      "persistent": true,
+      "scripts": [ "background.js", "worker.js" ]
+   },
+   "browser_action": {
+      "default_icon": "images/icon128.png",
+      "default_popup": "popup.html",
+      "default_title": "Audio-To-Text"
+   },
+   "commands": {
+      "start": {
+         "description": "Start Capture",
+         "suggested_key": {
+            "default": "Ctrl+Shift+S",
+            "mac": "Command+Shift+U"
+         }
+      },
+      "stop": {
+         "description": "Stop Capture",
+         "suggested_key": {
+            "default": "Ctrl+Shift+X",
+            "mac": "MacCtrl+Shift+X"
+         }
+      }
+   },
+   "description": "This extension captures the audio on the current tab and translate into your chose language.",
+   "icons": {
+      "128": "images/icon128.png"
+   },
+   "manifest_version": 2,
+   "name": "ATT",
+   "options_page": "options.html",
+   "permissions": [ "tabCapture", "downloads", "storage" ],
+   "version": "1.1.2"
+}
