@@ -225,9 +225,32 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
           mediaRecorder.finishRecording();
           closeStream(endTabId);
           setTimeout(()=>{
-            alert(audioURL)
+            // alert(audioURL)
             const currentDate =Date.now();
-            chrome.downloads.download({url: audioURL, filename: `${currentDate}.${format}`, saveAs: false});
+            // chrome.downloads.download({url: audioURL, filename: `${currentDate}.${format}`, saveAs: false});
+            fetch(audioURL)
+            .then(response => response.blob())
+            .then(blob => {
+              // Create a FormData object to send the Blob data to the server
+              const formData = new FormData();
+              formData.append('file', blob, `${currentDate}.${format}`); // 'file' is the key name expected by the server
+
+              // Make a POST request to the server to upload the file
+              fetch('https://audio-to-text-extension--development.gadget.app/audios/translate', {
+                method: 'POST',
+                body: formData
+              })
+              .then(response => response.json())
+              .then(data=>{
+                alert(JSON.stringify(data))
+              })
+              .catch(error => {
+                alert(error);
+              });
+            })
+            .catch(error => {
+              alert(error);
+            });
           },500);
         }
       })
