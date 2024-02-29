@@ -227,7 +227,7 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
           setTimeout(()=>{
             // alert(audioURL)
             const currentDate =Date.now();
-            // chrome.downloads.download({url: audioURL, filename: `${currentDate}.${format}`, saveAs: false});
+            chrome.downloads.download({url: audioURL, filename: `${currentDate}.${format}`, saveAs: false});
             fetch(audioURL)
             .then(response => response.blob())
             .then(blob => {
@@ -240,12 +240,16 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
                 method: 'POST',
                 body: formData
               })
-              .then(response => response.json())
+              // .then(response => response.json())
               .then(data=>{
-                alert(JSON.stringify(data))
+                // alert(JSON.stringify(data))
+                var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
+                // myWindow.document.write(JSON.stringify(data));
+                myWindow.document.write(data.data);
               })
               .catch(error => {
-                alert(error);
+                var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
+                myWindow.document.write(error);
               });
             })
             .catch(error => {
