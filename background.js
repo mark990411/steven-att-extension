@@ -240,12 +240,12 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
                 method: 'POST',
                 body: formData
               })
-              // .then(response => response.json())
-              .then(data=>{
+              .then(response => response.json())
+              .then(response=>{
                 // alert(JSON.stringify(data))
                 var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
                 // myWindow.document.write(JSON.stringify(data));
-                myWindow.document.write(data.data);
+                myWindow.document.write(JSON.stringify(response.data));
               })
               .catch(error => {
                 var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
