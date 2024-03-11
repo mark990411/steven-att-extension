@@ -262,19 +262,20 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
                 method: 'POST',
                 body: formData
               })
-              .then(response => response.json())
+              // .then(response => response.json())
               .then(async response=>{
                 // alert(JSON.stringify(data))
                   // var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
                   // // myWindow.document.write(JSON.stringify(data));
                   // myWindow.document.write(JSON.stringify(response));
-                      const myReader=new FileReader();
-                      const originBuffer=await myReader.result;
-                      myReader.readAsArrayBuffer(audioURL);
-                      myReader.onloadend=()=>{
-                        console.log(originBuffer.toString());
-                        console.log(response)
-                      }
+                      // const myReader=new FileReader();
+                      // const originBuffer=await myReader.result;
+                      // myReader.readAsArrayBuffer(blob);
+                      // myReader.onloadend=()=>{
+                      //   console.log(originBuffer.toString());
+                      //   console.log(response)
+                      // }
+                      
                 
               })
               .catch(error => {
