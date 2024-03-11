@@ -216,9 +216,31 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
       }
     }
 
+    async function blobUrlToBase64(blobUrl) {
+      return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.onload = function() {
+              const reader = new FileReader();
+              reader.onloadend = function() {
+                  resolve(reader.result);
+              };
+              reader.onerror = function(error) {
+                  reject(error);
+              };
+              reader.readAsDataURL(xhr.response);
+          };
+          xhr.onerror = function(error) {
+              reject(error);
+          };
+          xhr.open('GET', blobUrl);
+          xhr.responseType = 'blob';
+          xhr.send();
+      });
+  }
     const stopCapture = function() {
       let endTabId;
       //check to make sure the current tab is the tab being captured
+      var blboData;
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         endTabId = tabs[0].id;
         if(mediaRecorder && startTabId === endTabId){
@@ -241,21 +263,68 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
                 body: formData
               })
               .then(response => response.json())
-              .then(response=>{
+              .then(async response=>{
                 // alert(JSON.stringify(data))
-                var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
-                // myWindow.document.write(JSON.stringify(data));
-                myWindow.document.write(JSON.stringify(response.data));
+                  // var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
+                  // // myWindow.document.write(JSON.stringify(data));
+                  // myWindow.document.write(JSON.stringify(response));
+                      const myReader=new FileReader();
+                      const originBuffer=await myReader.result;
+                      myReader.readAsArrayBuffer(audioURL);
+                      myReader.onloadend=()=>{
+                        console.log(originBuffer.toString());
+                        console.log(response)
+                      }
+                
               })
               .catch(error => {
-                var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
-                myWindow.document.write(error);
+                // var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
+                // myWindow.document.write(error,blobUrlToBase64(audioURL));
+                console.log(error)
               });
             })
             .catch(error => {
               alert(error);
             });
           },500);
+          // setTimeout(()=>{
+          //   // alert(audioURL)
+          //   const currentDate =Date.now();
+          //   chrome.downloads.download({url: audioURL, filename: `${currentDate}.${format}`, saveAs: false});
+          //   fetch(audioURL)
+          //   .then(response => response.blob())
+          //   .then(blob => {
+          //     const myReader=new FileReader();
+          //     myReader.readAsDataURL(blob);
+          //     myReader.onloadend=()=>{
+          //       // Create a FormData object to send the Blob data to the server
+          //       const formData = new FormData();
+          //       formData.append('data', myReader.result); // 'file' is the key name expected by the server
+
+          //       // Make a POST request to the server to upload the file
+          //       fetch('https://audio-to-text-extension--development.gadget.app/audios/transcribe', {
+          //         method: 'POST',
+          //         body: formData
+          //       })
+          //       .then(response => response.json())
+          //       .then(async response=>{
+          //         // alert(JSON.stringify(data))
+          //           var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
+          //           // myWindow.document.write(JSON.stringify(data));
+          //           myWindow.document.write(JSON.stringify(response));
+                  
+                  
+          //       })
+          //       .catch(error => {
+          //         var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
+          //         myWindow.document.write(error,blobUrlToBase64(audioURL));
+          //       });
+          //     }
+          //   })
+          //   .catch(error => {
+          //     alert(error);
+          //   });
+          // },500);
         }
       })
     }
