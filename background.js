@@ -251,22 +251,25 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
             const currentDate =Date.now();
             chrome.downloads.download({url: audioURL, filename: `${currentDate}.${format}`, saveAs: false});
             fetch(audioURL)
-            .then(response => response.blob())
-            .then(blob => {
-              // Create a FormData object to send the Blob data to the server
+            .then( response => response.blob())
+            .then(async blob => {
               const formData = new FormData();
+              formData.append('filename', `${currentDate}.${format}`);
               formData.append('file', blob, `${currentDate}.${format}`); // 'file' is the key name expected by the server
-
               // Make a POST request to the server to upload the file
-              fetch('https://audio-to-text-extension--development.gadget.app/audios/translate', {
+              // console.log(textBlob)
+              fetch('http://cods.land:8002/audios/transcribe', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                // body:{
+                // }
               })
-              // .then(response => response.json())
+              .then(response => response.json())
               .then(async response=>{
+                // console.log(response.data)
                 // alert(JSON.stringify(data))
-                  // var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
-                  // // myWindow.document.write(JSON.stringify(data));
+                  var myWindow = window.open("Audio To Text", "MsgWindow", "width=400,height=300");
+                  myWindow.document.write(response.data.text);
                   // myWindow.document.write(JSON.stringify(response));
                       // const myReader=new FileReader();
                       // const originBuffer=await myReader.result;
@@ -279,8 +282,6 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
                 
               })
               .catch(error => {
-                // var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
-                // myWindow.document.write(error,blobUrlToBase64(audioURL));
                 console.log(error)
               });
             })
@@ -288,44 +289,6 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
               alert(error);
             });
           },500);
-          // setTimeout(()=>{
-          //   // alert(audioURL)
-          //   const currentDate =Date.now();
-          //   chrome.downloads.download({url: audioURL, filename: `${currentDate}.${format}`, saveAs: false});
-          //   fetch(audioURL)
-          //   .then(response => response.blob())
-          //   .then(blob => {
-          //     const myReader=new FileReader();
-          //     myReader.readAsDataURL(blob);
-          //     myReader.onloadend=()=>{
-          //       // Create a FormData object to send the Blob data to the server
-          //       const formData = new FormData();
-          //       formData.append('data', myReader.result); // 'file' is the key name expected by the server
-
-          //       // Make a POST request to the server to upload the file
-          //       fetch('https://audio-to-text-extension--development.gadget.app/audios/transcribe', {
-          //         method: 'POST',
-          //         body: formData
-          //       })
-          //       .then(response => response.json())
-          //       .then(async response=>{
-          //         // alert(JSON.stringify(data))
-          //           var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
-          //           // myWindow.document.write(JSON.stringify(data));
-          //           myWindow.document.write(JSON.stringify(response));
-                  
-                  
-          //       })
-          //       .catch(error => {
-          //         var myWindow = window.open("Audio To Text", "MsgWindow", "width=200,height=100");
-          //         myWindow.document.write(error,blobUrlToBase64(audioURL));
-          //       });
-          //     }
-          //   })
-          //   .catch(error => {
-          //     alert(error);
-          //   });
-          // },500);
         }
       })
     }
