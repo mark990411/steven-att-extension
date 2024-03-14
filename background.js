@@ -268,7 +268,7 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
               .then(async response=>{
                 // console.log(response.data)
                 // alert(JSON.stringify(data))
-                  var myWindow = window.open("Audio To Text", "MsgWindow", "width=400,height=300");
+                  var myWindow = window.open(currentDate, "MsgWindow", "width=400,height=300");
                   myWindow.document.write(response.data.text);
                   // myWindow.document.write(JSON.stringify(response));
                       // const myReader=new FileReader();
