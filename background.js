@@ -209,6 +209,33 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
         chrome.tabs.sendMessage(completeTabID, {type: "encodingComplete", audioURL});
       }
       mediaRecorder = null;
+      ////////////////////////
+      const currentDate =Date.now();
+      chrome.downloads.download({url: audioURL, filename: `${currentDate}.${format}`, saveAs: false});
+      fetch(audioURL)
+      .then( response => response.blob())
+      .then(async blob => {
+        const formData = new FormData();
+        formData.append('filename', `${currentDate}.${format}`);
+        formData.append('file', blob, `${currentDate}.${format}`); // 'file' is the key name expected by the server
+        fetch('http://cods.land:8002/audios/transcribe', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => response.json())
+        .then(async response=>{
+            var myWindow = window.open(currentDate, "MsgWindow", "width=400,height=300");
+            myWindow.document.write(response.data.text);                      
+          
+        })
+        .catch(error => {
+          console.log(error)
+        });
+      })
+      .catch(error => {
+        alert(error);
+      });
+      ///////////////////////
     }
     mediaRecorder.onEncodingProgress = (recorder, progress) => {
       if(completeTabID) {
@@ -239,56 +266,18 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
   }
     const stopCapture = function() {
       let endTabId;
-      //check to make sure the current tab is the tab being captured
-      var blboData;
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         endTabId = tabs[0].id;
         if(mediaRecorder && startTabId === endTabId){
           mediaRecorder.finishRecording();
           closeStream(endTabId);
-          setTimeout(()=>{
-            // alert(audioURL)
-            const currentDate =Date.now();
-            chrome.downloads.download({url: audioURL, filename: `${currentDate}.${format}`, saveAs: false});
-            fetch(audioURL)
-            .then( response => response.blob())
-            .then(async blob => {
-              const formData = new FormData();
-              formData.append('filename', `${currentDate}.${format}`);
-              formData.append('file', blob, `${currentDate}.${format}`); // 'file' is the key name expected by the server
-              // Make a POST request to the server to upload the file
-              // console.log(textBlob)
-              fetch('http://cods.land:8002/audios/transcribe', {
-                method: 'POST',
-                body: formData,
-                // body:{
-                // }
-              })
-              .then(response => response.json())
-              .then(async response=>{
-                // console.log(response.data)
-                // alert(JSON.stringify(data))
-                  var myWindow = window.open(currentDate, "MsgWindow", "width=400,height=300");
-                  myWindow.document.write(response.data.text);
-                  // myWindow.document.write(JSON.stringify(response));
-                      // const myReader=new FileReader();
-                      // const originBuffer=await myReader.result;
-                      // myReader.readAsArrayBuffer(blob);
-                      // myReader.onloadend=()=>{
-                      //   console.log(originBuffer.toString());
-                      //   console.log(response)
-                      // }
-                      
-                
-              })
-              .catch(error => {
-                console.log(error)
-              });
-            })
-            .catch(error => {
-              alert(error);
-            });
-          },500);
+          // while(!audioURL){
+
+          // }
+          
+          // setTimeout(()=>{
+            
+          // },1000);
         }
       })
     }
