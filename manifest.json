@@ -4,7 +4,7 @@
       "scripts": [ "background.js", "worker.js" ]
    },
    "browser_action": {
-      "default_icon": "images/icon128.png",
+      "default_icon": "images/text-to-speech.512x426.png",
       "default_popup": "popup.html",
       "default_title": "Audio-To-Text"
    },
@@ -26,7 +26,7 @@
    },
    "description": "This extension captures the audio on the current tab and translate into your chose language.",
    "icons": {
-      "128": "images/icon128.png"
+      "128": "images/text-to-speech.512x426.png"
    },
    "manifest_version": 2,
    "name": "ATT",

@@ -2,25 +2,42 @@
   <head>
     <title>Chrome Audio Capture</title>
     <script src="popup.js"></script>
-    <link rel="stylesheet" href="popup.css" type="text/css">
+    <link href="bootstrap.min.css" rel="stylesheet"  type="text/css">
+    <style>
+      body{
+        width:300px;
+      }
+      .logo{
+        width:20%;
+      }
+      .buttonContainer #finish{
+        display:none;
+      }
+      .buttonContainer #cancel{
+        display:none;
+      }
+    </style>
   </head>
   <body>
-    <div class="header"><img src="images/icon128.png"/> <h1>Audio-To-Text</h1></div>
-    <div id="status"></div>
-    <div id="timeRem"></div>
-    <div class="buttonContainer">
-      <div class="button" id="start">Start Capture</div>
-      <div class="button" id="finish">Save Capture</div>
-      <div class="button" id="cancel">Cancel Capture</div>
+    <div class="container pt-2 pb-2" >
+      <div class="header d-flex align-items-center justify-content-center"><img class="logo w-30" src="images/text-to-speech.512x426.png"/>&nbsp;&nbsp; <h2 class="text-primary" >Audio-To-Text</h2></div>
+      <div id="status"></div>
+      <div id="timeRem" class="d-flex align-items-center justify-content-center" ></div>
+      <div class="buttonContainer">
+        <div class="button btn btn-sm btn-primary ml-1 mr-1 mb-1 mt-1" id="start">Start</div>
+        <div class="button btn btn-sm btn-primary ml-1 mr-1 mb-1 mt-1" id="finish">Save</div>
+        <div class="button btn btn-sm btn-primary ml-1 mr-1 mb-1 mt-1" id="cancel">Cancel</div>
+      </div>
+      <ul> Hotkeys:
+        <li id="startKey">Ctrl/Command + Shift +   to start capture on current tab</li>
+        <li id="endKey">Ctrl/Command + Shift + X to stop capture on current tab</li>
+      </ul>
+      <div class="links">
+        <a id="options" href="">Options</a>
+        <!-- <p id="GitHub">GitHub</p> -->
+      </div>
     </div>
-    <ul> Hotkeys:
-      <li id="startKey">Ctrl/Command + Shift +   to start capture on current tab</li>
-      <li id="endKey">Ctrl/Command + Shift + X to stop capture on current tab</li>
-    </ul>
-
-    <div class="links">
-      <p id="options">Options</p>
-      <p id="GitHub">GitHub</p>
-    </div>
+    <script src="bootstrap.min.js" ></script>
   </body>
+  
 </html>

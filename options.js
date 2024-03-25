@@ -86,6 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
       quality: quality.value,
       limitRemoved: limitRemoved.checked
     });
-    status.innerHTML = "Settings saved!"
+    status.innerHTML = `<div class="alert alert-success alert-dismissible mt-4">
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      <strong>Success!</strong> Settings saved!
+    </div>`
   }
 });

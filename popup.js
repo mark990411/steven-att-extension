@@ -88,17 +88,23 @@ chrome.runtime.onMessage.addListener((request, sender) => {
         } else {
           timeLeft = options.maxTime - (Date.now() - request.startTime)
         }
-        status.innerHTML = "Tab is currently being captured";
+        // status.innerHTML = "Tab is currently being captured";
+        status.innerHTML = '';
         if(options.limitRemoved) {
-          timeRem.innerHTML = `${parseTime(Date.now() - request.startTime)}`;
+          timeRem.innerHTML = `<img src="recording.gif" />${parseTime(Date.now() - request.startTime)}`;
           interval = setInterval(() => {
-            timeRem.innerHTML = `${parseTime(Date.now() - request.startTime)}`
+            timeRem.innerHTML = `<img src="recording.gif" />${parseTime(Date.now() - request.startTime)}`
           }, 1000);
         } else {
-          timeRem.innerHTML = `${parseTime(timeLeft)} remaining`;
+          // timeRem.innerHTML = `${parseTime(timeLeft)} remaining`;
+          timeRem.innerHTML = `<img src="recording.gif" />${parseTime(timeLeft)}`;
+          // interval = setInterval(() => {
+          //   timeLeft = timeLeft - 1000;
+          //   timeRem.innerHTML = `${parseTime(timeLeft)} remaining`;
+          // }, 1000);
           interval = setInterval(() => {
             timeLeft = timeLeft - 1000;
-            timeRem.innerHTML = `${parseTime(timeLeft)} remaining`;
+            timeRem.innerHTML = `<img src="recording.gif" />${parseTime(timeLeft)}`;
           }, 1000);
         }
       });
